@@ -5,7 +5,7 @@ class DecisionTreeLearner:
 
     def __init__(self):
         self.decision_tree = None
-        self.label_probabilites = {}
+        self.label_probabilities = {}
         self.initial_label_entropy = None
         self.initial_label_entropy_with_respect_to_features = None
 
@@ -39,11 +39,20 @@ class DecisionTreeLearner:
         max_gain_attr_index = np.argmax(gains)
 
         # split the data on the max_gain attribute
-        unique_attribute_values, counts_per_value = np.unique(feature_data[:, max_gain_attr_index], return_counts=True)
+        data_split_by_attribute = self.split_data_by_attribute(feature_data, labels, max_gain_attr_index)
+
+        print('---')
+
+    @staticmethod
+    def split_data_by_attribute(feature_data, labels, attr_index):
+
+        unique_attribute_values, counts_per_value = np.unique(feature_data[:, attr_index], return_counts=True)
         data_split_by_attribute = []
         for attr_val_index, attr_val in enumerate(unique_attribute_values):
             record_indices_for_this_attr_val = np.where(feature_data[:, attr_index] == attr_val)
             feature_data_for_this_attr_val = feature_data[record_indices_for_this_attr_val]
+            # remove the selected attribute
+            feature_data_for_this_attr_val = np.delete(feature_data_for_this_attr_val, attr_index, 1)
             labels_for_this_attr_val = labels[record_indices_for_this_attr_val]
             unique_labels = np.unique(labels_for_this_attr_val)
             # check if leaf node
@@ -52,9 +61,7 @@ class DecisionTreeLearner:
 
             data_split_by_attribute.append((feature_data_for_this_attr_val, labels_for_this_attr_val))
 
-
-
-        print('-----')
+        return data_split_by_attribute
 
     def entropy_label_with_respect_to_attr_val(self, attr_index, attr_val, feature_data, labels, unique_labels):
 
