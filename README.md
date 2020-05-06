@@ -18,9 +18,9 @@ Queue Implementation of the ID3 algorithm
 ## Results
 Accuracy: 0.7857  
 It does not seem that ID3 would work for anything but very label-balanced datasets.  
-Once an attribute is picked, it can not be reused again. When we ran out of attributes,  
+Once an attribute is picked, it may not be used again. When we ran out of attributes,  
 the algorithm calls for assigning the majority label as a prediction, but  
 for very unbalanced datasets, the majority label will most likely be the most dominant class.  
-Hence the algorithm will almost always assign the dominant class to all the leaf nodes  
+Hence the algorithm will almost always assign the dominant class to all the leaf nodes,   
 once we run out of attributes.  
 
